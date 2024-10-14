@@ -1,0 +1,9 @@
+# Database Configuration
+db_host: "localhost" # or the actual IP address of your PostgreSQL server
+db_port: "5432"
+db_user: "postgres"
+db_password: "postgres"
+db_name: "postgres"
+
+# Server Configuration
+server_port: "8080"
