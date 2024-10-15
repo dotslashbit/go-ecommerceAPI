@@ -1,0 +1,15 @@
+meta {
+  name: Get Products by Filtering
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8080/products?category=Electronics
+  body: none
+  auth: none
+}
+
+params:query {
+  category: Electronics
+}
