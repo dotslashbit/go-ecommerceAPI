@@ -68,9 +68,9 @@ func (r *repository) List(ctx context.Context, filter ProductFilter, pagination 
 	args := []interface{}{}
 	argID := 1
 
-	if filter.CategoryID != nil {
-		whereClause = append(whereClause, fmt.Sprintf(`$%d = ANY(categories)`, argID))
-		args = append(args, *filter.CategoryID)
+	if filter.CategoryID != nil && *filter.CategoryID != "" {
+		whereClause = append(whereClause, fmt.Sprintf(`EXISTS (SELECT 1 FROM unnest(categories) category WHERE category ILIKE $%d)`, argID))
+		args = append(args, "%"+*filter.CategoryID+"%")
 		argID++
 	}
 	if filter.MinPrice != nil {
@@ -83,9 +83,9 @@ func (r *repository) List(ctx context.Context, filter ProductFilter, pagination 
 		args = append(args, *filter.MaxPrice)
 		argID++
 	}
-	if filter.Search != nil {
-		whereClause = append(whereClause, fmt.Sprintf("(name ILIKE $%d OR description ILIKE $%d)", argID, argID))
-		args = append(args, "%"+*filter.Search+"%")
+	if filter.Search != nil && *filter.Search != "" {
+		whereClause = append(whereClause, fmt.Sprintf("(to_tsvector('english', name) @@ plainto_tsquery('english', $%d) OR to_tsvector('english', description) @@ plainto_tsquery('english', $%d))", argID, argID))
+		args = append(args, *filter.Search)
 		argID++
 	}
 

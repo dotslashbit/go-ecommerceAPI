@@ -88,10 +88,7 @@ func (h *Handler) ListProducts(w http.ResponseWriter, r *http.Request, _ httprou
 
 	// Parse filter parameters
 	if categoryID := r.Form.Get("category_id"); categoryID != "" {
-		id, err := strconv.ParseInt(categoryID, 10, 64)
-		if err == nil {
-			filter.CategoryID = &id
-		}
+		filter.CategoryID = &categoryID
 	}
 	if minPrice := r.Form.Get("min_price"); minPrice != "" {
 		price, err := strconv.ParseFloat(minPrice, 64)
@@ -145,7 +142,6 @@ func (h *Handler) ListProducts(w http.ResponseWriter, r *http.Request, _ httprou
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
-
 func (h *Handler) UpdateProduct(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	id, err := strconv.ParseInt(ps.ByName("id"), 10, 64)
 	if err != nil {

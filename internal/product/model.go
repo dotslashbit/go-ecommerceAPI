@@ -31,7 +31,7 @@ type UpdateProductInput struct {
 }
 
 type ProductFilter struct {
-	CategoryID *int64   `json:"category_id"`
+	CategoryID *string  `json:"category_id"`
 	MinPrice   *float64 `json:"min_price"`
 	MaxPrice   *float64 `json:"max_price"`
 	Search     *string  `json:"search"`
